@@ -20,7 +20,7 @@ class Program
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="text")
@@ -43,14 +43,14 @@ class Program
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
