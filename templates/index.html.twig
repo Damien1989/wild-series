@@ -1,5 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Programmes{% endblock %}
+
 {% block body %}
-    <h1>Bienvenue !</h1>
+    <div class="container">
+        <h1>Toutes les séries</h1>
+        {% for program in programs %}
+            <div>
+                <h2>{{ program.title }}</h2>
+                <a href="{{ path("program_show", { id: program.id }) }}">Voir la fiche</a>
+            </div>
+        {% else %}
+            <div>
+                <p>Aucune série trouvée</p>
+            </div>
+        {% endfor %}
+        <a class="btn btn-warning" href="{{ path('program_new') }}">Add new program</a>
+        <a class="btn btn-warning" href="{{ path('app_index') }}">Retour à l'accueil</a>
+    </div>
 {% endblock %}
