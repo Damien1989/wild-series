@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acteurs{% endblock %}
+
+{% block body %}
+    <div class='container'>
+        <h1>Liste des acteurs :</h1>
+        <ul>
+            {% for actor in actors %}
+                <li>
+                    <h2>{{ actor.name }} </h2>
+                    <a href="{{ path('actor_show', {'id': actor.id}) }}">Voir sa fiche détaillée</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
