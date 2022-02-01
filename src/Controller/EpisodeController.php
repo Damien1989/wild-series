@@ -5,16 +5,21 @@ namespace App\Controller;
 use App\Entity\Episode;
 use App\Form\EpisodeType;
 use App\Repository\EpisodeRepository;
+use App\Service\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/episode')]
+/**
+ * @Route("/episode")
+ */
 class EpisodeController extends AbstractController
 {
-    #[Route('/', name: 'episode_index', methods: ['GET'])]
+    /**
+     * @Route("/", name="episode_index", methods={"GET"})
+     */
     public function index(EpisodeRepository $episodeRepository): Response
     {
         return $this->render('episode/index.html.twig', [
@@ -22,14 +27,18 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'episode_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    /**
+     * @Route("/new", name="episode_new", methods={"GET", "POST"})
+     * @param Slugify $slugify
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager, Slugify $slugify): Response
     {
         $episode = new Episode();
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $episode->setSlug($slugify->generate($episode->getTitle()));
             $entityManager->persist($episode);
             $entityManager->flush();
 
@@ -42,7 +51,9 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'episode_show', methods: ['GET'])]
+    /**
+     * @Route("/{slug}", name="episode_show", methods={"GET"})
+     */
     public function show(Episode $episode): Response
     {
         return $this->render('episode/show.html.twig', [
@@ -50,13 +61,16 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'episode_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Episode $episode, EntityManagerInterface $entityManager): Response
+    /**
+     * @Route("/{slug}/edit", name="episode_edit", methods={"GET", "POST"})
+     */
+    public function edit(Request $request, Episode $episode, EntityManagerInterface $entityManager, Slugify $slugify): Response
     {
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $episode->setSlug($slugify->generate($episode->getTitle()));
             $entityManager->flush();
 
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
@@ -68,7 +82,9 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'episode_delete', methods: ['POST'])]
+    /**
+     * @Route("/{slug}", name="episode_delete", methods={"POST"})
+     */
     public function delete(Request $request, Episode $episode, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
