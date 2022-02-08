@@ -1,0 +1,19 @@
+{% extends 'emailLayout.html.twig' %}
+
+{% block title %}{{ parent() }} d'une nouvelle série{% endblock %}
+
+{% block body %}
+    {% apply inky_to_html %}
+    <container>
+    <row class="header">
+    <columns>
+    <spacer size="16"></spacer>
+<h1>Nouvelle série {{ program.title }} créée</h1>
+    <p>Bonjour,</p>
+    <p>La nouvelle série {{ program.title }} a été créée sur Wild Series</p>
+<p>Résumé : {{program.summary }}
+    </columns>
+    </row>
+    </container>
+    {% endapply %}
+    {% endblock %}
