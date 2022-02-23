@@ -31,4 +31,35 @@
     <a href="{{ path('episode_edit', {'slug': episode.slug}) }}">edit</a>
 
     {{ include('episode/_delete_form.html.twig') }}
+
+
+    <h2>Commentaires</h2>
+    <table class="table">
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <th>Commentaire de {{ comment.user.email }}</th>
+                <td>{{comment.comment}}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{comment.rate}}/5</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h3>Ajouter un commentaire</h3>
+    {% if app.user %}
+        {{ form_start(formComment) }}
+        {{ form_widget(formComment) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(formComment) }}
+    {% else %}
+        <p>Veuillez <a href="{{ path('login') }}">Vous connecter</a> pour poster un commentaire.</p>
+    {% endif %}
+    <a class="btn btn-warning mt-5" href="{{ path('app_index') }}">Retour à l'accueil</a>
+
+
+
+
 {% endblock %}

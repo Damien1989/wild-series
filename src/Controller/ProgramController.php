@@ -28,14 +28,14 @@ class ProgramController extends AbstractController
             ->getRepository(Program::class)
             ->findAll();
 
-        return $this->render(
-            'program/index.html.twig',
-            ['programs' => $programs]
+        return $this->render('program/index.html.twig', [
+                'programs' => $programs,
+            ]
         );
     }
 
     /**
-     * @Route("program/new", name="new")
+     * @Route("program/new", name="program_new")
      */
     public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
